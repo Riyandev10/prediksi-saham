@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hasil Prediksi Manual</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      body {
+        background-color: #0d6efd;
+        color: #fff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .content-box {
+        background-color: #fff;
+        color: #212529;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        max-width: 800px;
+        width: 100%;
+        margin: 50px auto 30px auto;
+      }
+
+      h2,
+      h4 {
+        font-weight: 700;
+        color: #000;
+        margin-bottom: 20px;
+      }
+
+      .btn-gradient {
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        color: #fff;
+        transition: all 0.3s ease;
+        padding: 8px 15px;
+      }
+
+      .btn-primary-gradient {
+        background: linear-gradient(135deg, #007bff, #0056d2);
+      }
+
+      .btn-primary-gradient:hover {
+        background: linear-gradient(135deg, #0069d9, #004bb5);
+        transform: translateY(-2px);
+      }
+
+      .table th,
+      .table td {
+        vertical-align: middle;
+      }
+
+      footer {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        text-align: center;
+        padding: 15px;
+        margin-top: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="content-box">
+      <h2 class="text-center mb-4">Hasil Prediksi Harga Saham Harian</h2>
+
+      <div class="alert alert-info text-center">
+        Hasil Prediksi Regresi Linear: <strong style="font-size: 1.25em" class="text-success">{{ predicted_lr }}</strong> | Hasil Prediksi Backpropagation: <strong style="font-size: 1.25em" class="text-danger">{{ predicted_bp }}</strong>
+      </div>
+
+      <h4 class="mt-4">Data Input & Output:</h4>
+      <div class="table-responsive mb-4">
+        <table class="table table-bordered table-striped text-center">
+          <thead class="table-dark">
+            <tr>
+              <th>Previous</th>
+              <th>High</th>
+              <th>Low</th>
+              <th>Actual Close</th>
+              <th>Predicted Close (LR)</th>
+              <th>Predicted Close (BP)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ previous }}</td>
+              <td>{{ high }}</td>
+              <td>{{ low }}</td>
+              <td><strong>{{ actual }}</strong></td>
+              <td><strong class="text-success">{{ predicted_lr }}</strong></td>
+              <td><strong class="text-danger">{{ predicted_bp }}</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Metrik Error Prediksi Tunggal:</h4>
+      <div class="table-responsive mb-4">
+        <table class="table table-bordered table-striped align-middle text-center">
+          <thead class="table-dark">
+            <tr>
+              <th>Algoritma</th>
+              <th>RMSE (Root Mean Squared Error)</th>
+              <th>MAE (Mean Absolute Error)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Regresi Linear (LR)</strong></td>
+              <td>{{ rmse_lr }}</td>
+              <td>{{ mae_lr }}</td>
+            </tr>
+            <tr>
+              <td><strong>Backpropagation (NN)</strong></td>
+              <td>{{ rmse_bp }}</td>
+              <td>{{ mae_bp }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="text-muted text-center">Metrik ini dihitung berdasarkan perbandingan hasil prediksi terhadap **Actual Close** yang Anda inputkan.</p>
+      </div>
+
+      <h4 class="text-center">Grafik Perbandingan Aktual vs Prediksi</h4>
+      <div class="p-3 border rounded shadow-sm text-center mb-5">
+        <img src="data:image/png;base64,{{ plot_url }}" class="img-fluid" alt="Grafik Perbandingan Manual" />
+        <small class="text-muted d-block mt-2">Grafik ini membandingkan Harga Aktual (Hijau) dengan Prediksi Regresi Linear (Biru) dan Backpropagation (Merah).</small>
+      </div>
+
+      <div class="text-center mt-4">
+        <a href="{{ url_for('index') }}" class="btn btn-gradient btn-primary-gradient">Kembali ke Halaman Utama</a>
+      </div>
+    </div>
+
+    <footer>
+      <small>&copy; 2025 Prediksi Saham | Dibuat oleh Riyan Setiawan</small>
+    </footer>
+  </body>
+</html>

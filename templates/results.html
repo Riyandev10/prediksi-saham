@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hasil Komparasi Prediksi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      body {
+        background-color: #0d6efd;
+        color: #fff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .content-box {
+        background-color: #fff;
+        color: #212529;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        max-width: 1100px;
+        width: 100%;
+        margin: 50px auto 30px auto;
+      }
+
+      h2,
+      h4 {
+        font-weight: 700;
+        color: #000;
+        margin-bottom: 20px;
+      }
+
+      .btn-gradient {
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        color: #fff;
+        transition: all 0.3s ease;
+        padding: 8px 15px;
+      }
+
+      .btn-primary-gradient {
+        background: linear-gradient(135deg, #007bff, #0056d2);
+      }
+
+      .btn-primary-gradient:hover {
+        background: linear-gradient(135deg, #0069d9, #004bb5);
+        transform: translateY(-2px);
+      }
+
+      .table th,
+      .table td {
+        vertical-align: middle;
+      }
+
+      footer {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        text-align: center;
+        padding: 15px;
+        margin-top: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="content-box">
+      <h2 class="text-center mb-5">Hasil Analisis Komparasi Model Prediksi</h2>
+
+      <div class="row mb-5">
+        <div class="col-12">
+          <h4 class="text-center">1. Grafik Aktual Data Set (Harga Close)</h4>
+          <div class="p-3 border rounded shadow-sm">
+            <img src="data:image/png;base64,{{ plot_actual_url }}" class="img-fluid" alt="Grafik Aktual Data" />
+          </div>
+        </div>
+      </div>
+
+      <h4 class="text-center">2. Data Historis Dataset</h4>
+      {% if historical_data %}
+      <div class="table-responsive mb-5" style="max-height: 400px; overflow-y: auto">
+        <table class="table table-bordered table-striped align-middle text-center">
+          <thead class="table-light sticky-top" style="background-color: #f8f9fa">
+            <tr>
+              <th>No.</th>
+              <th>Previous</th>
+              <th>High</th>
+              <th>Low</th>
+              <th>Close (Actual)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in historical_data %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ "%.2f"|format(item.previous) }}</td>
+              <td>{{ "%.2f"|format(item.high) }}</td>
+              <td>{{ "%.2f"|format(item.low) }}</td>
+              <td>{{ "%.2f"|format(item.close) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="text-muted text-center mb-5">Data historis tidak ditemukan.</p>
+      {% endif %}
+
+      <div class="row mb-5">
+        <div class="col-12">
+          <h4 class="text-center">3. Grafik Perbandingan Actual vs Regresi Linear vs Backpropagation</h4>
+          <div class="p-3 border rounded shadow-sm">
+            <img src="data:image/png;base64,{{ plot_url }}" class="img-fluid" alt="Grafik Perbandingan" />
+          </div>
+          <small class="text-muted d-block text-center mt-2">Garis biru: Data Actual. Garis orange: Prediksi Regresi Linear. Garis hijau: Prediksi Backpropagation.</small>
+        </div>
+      </div>
+
+      <h4 class="text-center">4. Studi Komparasi Algoritma (Metrik Error)</h4>
+      {% if comparison_table %}
+      <div class="table-responsive mb-4">
+        <table class="table table-bordered table-striped align-middle text-center">
+          <thead class="table-dark">
+            <tr>
+              <th>Algoritma</th>
+              <th>RMSE (Root Mean Squared Error)</th>
+              <th>MAE (Mean Absolute Error)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in comparison_table %}
+            <tr>
+              <td><strong>{{ item.algorithm }}</strong></td>
+              <td>{{ item.rmse }}</td>
+              <td>{{ item.mae }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <p class="text-muted text-center">Nilai **RMSE** dan **MAE** yang **lebih kecil** menunjukkan model prediksi yang **lebih baik**.</p>
+      </div>
+      {% else %}
+      <p class="text-muted text-center mb-4">Hasil komparasi tidak ditemukan.</p>
+      {% endif %}
+
+      <div class="text-center mt-4">
+        <a href="{{ url_for('index') }}" class="btn btn-gradient btn-primary-gradient">Kembali ke Halaman Utama</a>
+      </div>
+    </div>
+
+    <footer>
+      <small>&copy; 2025 Prediksi Saham | Dibuat oleh Riyan Setiawan</small>
+    </footer>
+  </body>
+</html>

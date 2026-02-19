@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Prediksi Harga Saham</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      body {
+        background-color: #0d6efd;
+        color: #fff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+
+      .main-container {
+        max-width: 700px;
+        width: 95%;
+        margin: 80px auto 30px auto;
+      }
+
+      .content-box {
+        background-color: #fff;
+        color: #212529;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      h2 {
+        font-weight: 700;
+        color: #000;
+      }
+
+      .btn-gradient {
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        color: #fff;
+        transition: all 0.3s ease;
+        padding: 10px;
+      }
+
+      .btn-primary-gradient {
+        background: linear-gradient(135deg, #007bff, #0056d2);
+      }
+
+      .btn-primary-gradient:hover {
+        background: linear-gradient(135deg, #0069d9, #004bb5);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-outline-gradient {
+        background: linear-gradient(135deg, #6c757d, #495057);
+        color: #fff;
+        border: none;
+      }
+
+      .btn-outline-gradient:hover {
+        background: linear-gradient(135deg, #5a6268, #343a40);
+        transform: translateY(-2px);
+      }
+
+      footer {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        text-align: center;
+        padding: 15px;
+        margin-top: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-container">
+      <h2 class="text-center mb-5 text-white">Sistem Prediksi Harga Saham PT Astra Agro Lestari</h2>
+
+      {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+      <div class="alert alert-danger text-center">{{ message }}</div>
+      {% endfor %} {% endif %} {% endwith %}
+
+      <div class="mb-5">
+        <div class="content-box">
+          <h4 class="text-center mb-4">1. Komparasi Algoritma (Upload Dataset)</h4>
+          <p class="text-muted text-center">Latih dan bandingkan model Regresi Linear dan Backpropagation menggunakan file dataset Anda.</p>
+
+          <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" class="mb-5 p-3 border rounded shadow-sm bg-light">
+            <div class="mb-3">
+              <label for="file" class="form-label text-dark">Pilih File CSV Data Saham</label>
+              <input type="file" name="file" id="file" class="form-control" accept=".csv" required />
+              <small class="form-text text-muted">File harus CSV (delimiter ';') dengan kolom: 'previous', 'high', 'low', 'close'.</small>
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-gradient btn-primary-gradient">Upload & Analisis</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <div class="content-box">
+          <h4 class="text-center mb-4">2. Prediksi Manual Harian</h4>
+          <p class="text-muted text-center">Dapatkan prediksi harga *Close* hari ini berdasarkan harga 4 parameter historis.</p>
+
+          <form action="{{ url_for('predict') }}" method="post">
+            <div class="mb-3">
+              <label class="form-label text-dark">Input Previous</label>
+              <input type="number" step="any" name="previous" class="form-control" required value="{{ request.form.previous or '' }}" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-dark">Input High</label>
+              <input type="number" step="any" name="high" class="form-control" required value="{{ request.form.high or '' }}" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-dark">Input Low</label>
+              <input type="number" step="any" name="low" class="form-control" required value="{{ request.form.low or '' }}" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-dark">Input Close (Actual)</label>
+              <input type="number" step="any" name="close" class="form-control" required value="{{ request.form.close or '' }}" />
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-gradient btn-primary-gradient">Prediksi Sekarang</button>
+            </div>
+          </form>
+          <div class="text-center mt-4"></div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <small>&copy; 2025 Prediksi Saham | Dibuat oleh Riyan Setiawan</small>
+    </footer>
+  </body>
+</html>
